@@ -1,0 +1,36 @@
+# Compiled object files and binaries
+*.o
+*.a
+*.lib
+*.so
+*.dylib
+*.exe
+*.out
+
+# CMake build directories
+/build/
+/cmake-build-*/
+
+# CLion / JetBrains
+.idea/
+cmake-build-debug/
+cmake-build-release/
+*.iml
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# MacOS junk
+.DS_Store
+
+# Windows junk
+Thumbs.db
+
+# Logs and temporary files
+*.log
+*.tmp
+*.swp
+
+# Raylib dependencies (if built manually)
+raylib/
