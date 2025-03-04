@@ -6,7 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 # Add Raylib to the project
 find_package(raylib REQUIRED)
 
-add_executable(VoxelTerrain src/main.cpp)
 add_executable(VoxelTerrain src/main.cpp src/Freecam.cpp)
 
 # Link Raylib to the executable

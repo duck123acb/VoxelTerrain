@@ -40,9 +40,9 @@ struct WorldMesh
     std::vector<float> vertices;
     std::vector<float> indices;
 
-    void addPoints(std::vector<Vector3> newVertices)
+    void addPoints(const std::vector<Vector3>& newVertices)
     {
-        for (Vector3 vertex in newVertices)
+        for (Vector3 vertex : newVertices)
         {
             vertices.push_back(vertex.x);
             vertices.push_back(vertex.y);
@@ -62,9 +62,9 @@ class World
     {
         return 0;
     }
-    [[nodiscard]] bool checkBlockExposedFaces(const int i, const int j, const int k) const
+    [[nodiscard]] std::vector<bool> checkBlockExposedFaces(const int i, const int j, const int k) const
     {
-        bool exposedFaces[6] = { false, false, false, false, false, false };
+        std::vector<bool> exposedFaces = { false, false, false, false, false, false };
 
         // Up face (i, j, k+1)
         if (k + 1 >= height || blocks[i][j][k + 1].blockType == Air) {
@@ -149,17 +149,17 @@ class World
                     for (int j = 0; j < 8 * chunkY; j++)
                     {
                         for (int k = 0; k < height; k++) {
-        
-                            Block& currentBlock = blocks[i][j][k];
-                            auto exposedFaces = checkBlockExposedFaces(i, j, k);
+
+                            const Block& currentBlock = blocks[i][j][k];
+                            std::vector<bool> exposedFaces = checkBlockExposedFaces(i, j, k);
                             if (exposedFaces[UP])
                             {
-                                const int upOffset = currentBlock.y - (BLOCK_SIZE / 2)
-                                const int left = currentBlock.x - (BLOCK_SIZE / 2)
-                                const int right = currentBlock.x + (BLOCK_SIZE / 2)
-                                const int backward = currentBlock.z - (BLOCK_SIZE / 2)
-                                const int forward = currentBlock.z + (BLOCK_SIZE / 2)
-        
+                                const float upOffset = currentBlock.y - (BLOCK_SIZE / 2);
+                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
+                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
+                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
+                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+
                                 std::vector<Vector3> points = {
                                     { left, upOffset, backward },   // left-back
                                     { right, upOffset, backward },  // right-back
