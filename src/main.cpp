@@ -121,12 +121,16 @@ class World
                 // generate blocks up to the height determined by the heightmap
                 for (int k = 0; k < height; k++) // iterate over height (y-axis)
                 {
+                    float x = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    float y = (k * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    float z = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+
                     if (k <= columnHeight)
                     {
-                        blocks[i][k][j] = Block(i, k, j, Grass, true);
+                        blocks[i][k][j] = Block(x, y, z, Grass, true);
                         continue;
                     }
-                    blocks[i][k][j] = Block(i, k, j, Air, false);
+                    blocks[i][k][j] = Block(x, y, z, Air, false);
                 }
             }
         }
@@ -135,33 +139,41 @@ class World
     void updateMeshes()
     {
         // chunk blocks into 8x8xHeight grids to generate voxel data
-        for (int i = 0; i < 8; i++)
+        for (int chunkX = 1; chunkX < 9; chunkX++)
         {
-            for (int j = 0; j < 8; j++)
+            for (int chunkY = 1; chunkY < 9; chunkY++)
             {
-                for (int k = 0; k < height; k++) {
-                    auto worldMesh = WorldMesh();
-
-                    Block& currentBlock = blocks[i][j][k];
-                    auto exposedFaces = checkBlockExposedFaces(i, j, k);
-                    if (exposedFaces[UP])
+                auto worldMesh = WorldMesh();
+                for (int i = 0; i < 8 * chunkX; i++)
+                {
+                    for (int j = 0; j < 8 * chunkY; j++)
                     {
-                        const int upOffset = currentBlock.y - (BLOCK_SIZE / 2)
-                        const int left = currentBlock.x - (BLOCK_SIZE / 2)
-                        const int right = currentBlock.x + (BLOCK_SIZE / 2)
-                        const int backward = currentBlock.z - (BLOCK_SIZE / 2)
-                        const int forward = currentBlock.z + (BLOCK_SIZE / 2)
-
-                        std::vector<Vector3> points = {
-                            { left, upOffset, backward },   // left-back
-                            { right, upOffset, backward },  // right-back
-                            { left, upOffset, forward },    // left-front
-                            { right, upOffset, forward }    // right-front
-                        };
-
-                        worldMesh.addPoints(points);
+                        for (int k = 0; k < height; k++) {
+        
+                            Block& currentBlock = blocks[i][j][k];
+                            auto exposedFaces = checkBlockExposedFaces(i, j, k);
+                            if (exposedFaces[UP])
+                            {
+                                const int upOffset = currentBlock.y - (BLOCK_SIZE / 2)
+                                const int left = currentBlock.x - (BLOCK_SIZE / 2)
+                                const int right = currentBlock.x + (BLOCK_SIZE / 2)
+                                const int backward = currentBlock.z - (BLOCK_SIZE / 2)
+                                const int forward = currentBlock.z + (BLOCK_SIZE / 2)
+        
+                                std::vector<Vector3> points = {
+                                    { left, upOffset, backward },   // left-back
+                                    { right, upOffset, backward },  // right-back
+                                    { left, upOffset, forward },    // left-front
+                                    { right, upOffset, forward }    // right-front
+                                };
+        
+                                worldMesh.addPoints(points);
+                            }
+                            // other faces
+    
+                            // connect the voxel data
+                        }
                     }
-                    // connect the voxel data
                 }
             }
         }
