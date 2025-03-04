@@ -21,11 +21,11 @@ enum Face
 };
 struct Block
 {
-    int x, y, z;
+    float x, y, z;
     int blockType;
     bool isSolid;
 
-    Block(const int x, const int y, const int z, const int blockType, const bool isSolid)
+    Block(const float x, const float y, const float z, const int blockType, const bool isSolid)
     {
         this->x = x;
         this->y = y;
@@ -121,9 +121,9 @@ class World
                 // generate blocks up to the height determined by the heightmap
                 for (int k = 0; k < height; k++) // iterate over height (y-axis)
                 {
-                    float x = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-                    float y = (k * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-                    float z = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    const float x = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    const float y = (k * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    const float z = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
 
                     if (k <= columnHeight)
                     {
