@@ -40,10 +40,14 @@ struct WorldMesh
     std::vector<float> vertices;
     std::vector<float> indices;
 
-    WorldMesh(const std::vector<float>& vertices, const std::vector<float>& indices)
+    void addPoints(std::vector<Vector3> newVertices)
     {
-        this->vertices = vertices;
-        this->indices = indices;
+        for (Vector3 vertex in newVertices)
+        {
+            vertices.push_back(vertex.x);
+            vertices.push_back(vertex.y);
+            vertices.push_back(vertex.z);
+        }
     }
 };
 
@@ -136,9 +140,27 @@ class World
             for (int j = 0; j < 8; j++)
             {
                 for (int k = 0; k < height; k++) {
+                    auto worldMesh = WorldMesh();
+
                     Block& currentBlock = blocks[i][j][k];
                     auto exposedFaces = checkBlockExposedFaces(i, j, k);
-                    // get voxel data
+                    if (exposedFaces[UP])
+                    {
+                        const int upOffset = currentBlock.y - (BLOCK_SIZE / 2)
+                        const int left = currentBlock.x - (BLOCK_SIZE / 2)
+                        const int right = currentBlock.x + (BLOCK_SIZE / 2)
+                        const int backward = currentBlock.z - (BLOCK_SIZE / 2)
+                        const int forward = currentBlock.z + (BLOCK_SIZE / 2)
+
+                        std::vector<Vector3> points = {
+                            { left, upOffset, backward },   // left-back
+                            { right, upOffset, backward },  // right-back
+                            { left, upOffset, forward },    // left-front
+                            { right, upOffset, forward }    // right-front
+                        };
+
+                        worldMesh.addPoints(points);
+                    }
                     // connect the voxel data
                 }
             }
