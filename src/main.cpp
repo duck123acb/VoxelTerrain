@@ -1,6 +1,5 @@
 #include "raylib.h"
 #include <cmath>
-#include <memory>
 #include <vector>
 
 #define MOUSE_SENSITIVITY 0.003f
@@ -85,6 +84,15 @@ enum BlockTypes
     Air,
     Grass
 };
+enum Face
+{
+    UP,
+    DOWN,
+    LEFT,
+    RIGHT,
+    FRONT,
+    BACK
+};
 struct Block
 {
     int x, y, z;
@@ -101,16 +109,64 @@ struct Block
     }
 };
 
+struct WorldMesh
+{
+    std::vector<float> vertices;
+    std::vector<float> indices;
+
+    WorldMesh(const std::vector<float>& vertices, const std::vector<float>& indices)
+    {
+        this->vertices = vertices;
+        this->indices = indices;
+    }
+};
+
 class World
 {
     std::vector<std::vector<std::vector<Block>>> blocks;
+    std::vector<WorldMesh> worldMeshes;
 
-    float vertices[];
-    unsigned short indices[];
+    int height;
 
-    static int generateHeight(const int x, const int y) // generate terrain based on perlin noise
+    static int calculateTerrainHeight(const int x, const int y) // generate terrain based on perlin noise
     {
         return 0;
+    }
+    [[nodiscard]] bool checkBlockExposedFaces(const int i, const int j, const int k) const
+    {
+        bool exposedFaces[6] = { false, false, false, false, false, false };
+
+        // Up face (i, j, k+1)
+        if (k + 1 >= height || blocks[i][j][k + 1].blockType == Air) {
+            exposedFaces[UP] = true;
+        }
+
+        // Down face (i, j, k-1)
+        if (k - 1 < 0 || blocks[i][j][k - 1].blockType == Air) {
+            exposedFaces[DOWN] = true;
+        }
+
+        // Left face (i-1, j, k)
+        if (i - 1 < 0 || blocks[i - 1][j][k].blockType == Air) {
+            exposedFaces[LEFT] = true;
+        }
+
+        // Right face (i+1, j, k)
+        if (i + 1 >= height || blocks[i + 1][j][k].blockType == Air) {
+            exposedFaces[RIGHT] = true;
+        }
+
+        // Front face (i, j+1, k)
+        if (j + 1 >= height || blocks[i][j + 1][k].blockType == Air) {
+            exposedFaces[FRONT] = true;
+        }
+
+        // Back face (i, j-1, k)
+        if (j - 1 < 0 || blocks[i][j - 1][k].blockType == Air) {
+            exposedFaces[BACK] = true;
+        }
+
+        return exposedFaces;
     }
 
     void generateWorld(const int width, const int depth, const int height)
@@ -121,15 +177,14 @@ class World
         {
             for (int j = 0; j < depth; j++)
             {
-                heightMap[i][j] = generateHeight(i, j);
+                heightMap[i][j] = calculateTerrainHeight(i, j);
             }
         }
 
         // generate an internal representation of the world based on the heightMap
-        blocks = std::vector(64, std::vector(64, std::vector<Block>(64)));
-        for (int i = 0; i < 64; i++) // iterate over depth (z-axis)
+        for (int i = 0; i < width; i++)// iterate over width (x-axis)
         {
-            for (int j = 0; j < 64; j++) // iterate over width (x-axis)
+            for (int j = 0; j < depth; j++) // iterate over depth (z-axis)
             {
                 const int columnHeight = heightMap[i][j];
 
@@ -138,30 +193,44 @@ class World
                 {
                     if (k <= columnHeight)
                     {
-                        blocks[i][k][j] = Block(i, k, i, Grass, true);
+                        blocks[i][k][j] = Block(i, k, j, Grass, true);
                         continue;
                     }
-                    blocks[i][k][j] = Block(i, k, i, Air, false);
+                    blocks[i][k][j] = Block(i, k, j, Air, false);
                 }
             }
         }
+    }
 
-        // generate voxel data
+    void updateMeshes()
+    {
+        // chunk blocks into 8x8xHeight grids to generate voxel data
+        for (int i = 0; i < 8; i++)
+        {
+            for (int j = 0; j < 8; j++)
+            {
+                for (int k = 0; k < height; k++) {
+                    Block& currentBlock = blocks[i][j][k];
+                    auto exposedFaces = checkBlockExposedFaces(i, j, k);
+                    // get voxel data
+                    // connect the voxel data
+                }
+            }
+        }
     }
 
 public:
     World(const int world_width, const int world_depth, const int world_height)
     {
+        height = world_height;
         generateWorld(world_width, world_depth, world_height);
     }
-    ~World() = delete;
 
 
-
-    void render()
-    {
-
-    }
+    // void render()
+    // {
+    //
+    // }
 };
 
 
