@@ -117,13 +117,14 @@ class World
             for (int j = 0; j < depth; j++) // iterate over depth (z-axis)
             {
                 const int columnHeight = heightMap[i][j];
+                constexpr float halfBlockSize = BLOCK_SIZE / 2;
 
                 // generate blocks up to the height determined by the heightmap
                 for (int k = 0; k < height; k++) // iterate over height (y-axis)
                 {
-                    const float x = (i * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-                    const float y = (k * BLOCK_SIZE) + (BLOCK_SIZE / 2);
-                    const float z = (j * BLOCK_SIZE) + (BLOCK_SIZE / 2);
+                    const float x = (i * BLOCK_SIZE) + halfBlockSize;
+                    const float y = (k * BLOCK_SIZE) + halfBlockSize;
+                    const float z = (j * BLOCK_SIZE) + halfBlockSize;
 
                     if (k <= columnHeight)
                     {
@@ -153,13 +154,14 @@ class World
                             const Block& currentBlock = blocks[i][j][k];
                             std::vector<bool> exposedFaces = checkBlockExposedFaces(i, j, k);
 
+                            const float halfBlockSize = BLOCK_SIZE / 2;
                             if (exposedFaces[UP])
                             {
-                                const float upOffset = currentBlock.y - (BLOCK_SIZE / 2);
-                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
-                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
-                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
-                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const float upOffset = currentBlock.y - halfBlockSize;
+                                const float left = currentBlock.x - halfBlockSize;
+                                const float right = currentBlock.x + halfBlockSize;
+                                const float backward = currentBlock.z - halfBlockSize;
+                                const float forward = currentBlock.z + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { left, upOffset, backward },   // left-back
                                     { right, upOffset, backward },  // right-back
@@ -172,11 +174,11 @@ class World
 
                             if (exposedFaces[DOWN])
                             {
-                                const float downOffset = currentBlock.y + (BLOCK_SIZE / 2);
-                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
-                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
-                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
-                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const float downOffset = currentBlock.y + halfBlockSize;
+                                const float left = currentBlock.x - halfBlockSize;
+                                const float right = currentBlock.x + halfBlockSize;
+                                const float backward = currentBlock.z - halfBlockSize;
+                                const float forward = currentBlock.z + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { left, downOffset, backward },   // left-back
                                     { right, downOffset, backward },  // right-back
@@ -189,11 +191,11 @@ class World
 
                             if (exposedFaces[RIGHT])
                             {
-                                const float rightOffset = currentBlock.x + (BLOCK_SIZE / 2);
-                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
-                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
-                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
-                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const float rightOffset = currentBlock.x + halfBlockSize;
+                                const float up = currentBlock.y - halfBlockSize;
+                                const float down = currentBlock.y + halfBlockSize;
+                                const float backward = currentBlock.z - halfBlockSize;
+                                const float forward = currentBlock.z + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { rightOffset, up, backward },   // top-back
                                     { rightOffset, down, backward },  // bottom-back
@@ -206,11 +208,11 @@ class World
 
                             if (exposedFaces[LEFT])
                             {
-                                const float leftOffset = currentBlock.x - (BLOCK_SIZE / 2);
-                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
-                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
-                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
-                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const float leftOffset = currentBlock.x - halfBlockSize;
+                                const float up = currentBlock.y - halfBlockSize;
+                                const float down = currentBlock.y + halfBlockSize;
+                                const float backward = currentBlock.z - halfBlockSize;
+                                const float forward = currentBlock.z + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { leftOffset, up, backward },   // top-back
                                     { leftOffset, down, backward },  // bottom-back
@@ -223,11 +225,11 @@ class World
 
                             if (exposedFaces[FRONT])
                             {
-                                const float forwardOffset = currentBlock.z + (BLOCK_SIZE / 2);
-                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
-                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
-                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
-                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
+                                const float forwardOffset = currentBlock.z + halfBlockSize;
+                                const float up = currentBlock.y - halfBlockSize;
+                                const float down = currentBlock.y + halfBlockSize;
+                                const float left = currentBlock.x - halfBlockSize;
+                                const float right = currentBlock.x + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { left, up, forwardOffset },   // top-left
                                     { right, up, forwardOffset },  // top-right
@@ -240,11 +242,11 @@ class World
 
                             if (exposedFaces[BACK])
                             {
-                                const float backOffset = currentBlock.z - (BLOCK_SIZE / 2);
-                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
-                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
-                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
-                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
+                                const float backOffset = currentBlock.z - halfBlockSize;
+                                const float up = currentBlock.y - halfBlockSize;
+                                const float down = currentBlock.y + halfBlockSize;
+                                const float left = currentBlock.x - halfBlockSize;
+                                const float right = currentBlock.x + halfBlockSize;
                                 const std::vector<Vector3> points = {
                                     { left, up, backOffset },   // top-left
                                     { right, up, backOffset },  // top-right
