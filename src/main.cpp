@@ -154,7 +154,7 @@ class World
                             const Block& currentBlock = blocks[i][j][k];
                             std::vector<bool> exposedFaces = checkBlockExposedFaces(i, j, k);
 
-                            const float halfBlockSize = BLOCK_SIZE / 2;
+                            constexpr float halfBlockSize = BLOCK_SIZE / 2;
                             if (exposedFaces[UP])
                             {
                                 const float upOffset = currentBlock.y - halfBlockSize;
