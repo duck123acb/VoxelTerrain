@@ -136,7 +136,7 @@ class World
         }
     }
 
-    void updateMeshes()
+    void updateMeshes() const
     {
         // chunk blocks into 8x8xHeight grids to generate voxel data
         for (int chunkX = 1; chunkX < 9; chunkX++)
@@ -159,14 +159,77 @@ class World
                                 const float right = currentBlock.x + (BLOCK_SIZE / 2);
                                 const float backward = currentBlock.z - (BLOCK_SIZE / 2);
                                 const float forward = currentBlock.z + (BLOCK_SIZE / 2);
-
-                                std::vector<Vector3> points = {
+                                const std::vector<Vector3> points = {
                                     { left, upOffset, backward },   // left-back
                                     { right, upOffset, backward },  // right-back
                                     { left, upOffset, forward },    // left-front
                                     { right, upOffset, forward }    // right-front
                                 };
         
+                                worldMesh.addPoints(points);
+                            }
+                            if (exposedFaces[DOWN])
+                            {
+                                const float upOffset = currentBlock.y + (BLOCK_SIZE / 2);
+                                const float left = currentBlock.x - (BLOCK_SIZE / 2);
+                                const float right = currentBlock.x + (BLOCK_SIZE / 2);
+                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
+                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const std::vector<Vector3> points = {
+                                    { left, upOffset, backward },   // left-back
+                                    { right, upOffset, backward },  // right-back
+                                    { left, upOffset, forward },    // left-front
+                                    { right, upOffset, forward }    // right-front
+                                };
+        
+                                worldMesh.addPoints(points);
+                            }
+                            if (exposedFaces[RIGHT])
+                            {
+                                const float rightOffset = currentBlock.x + (BLOCK_SIZE / 2);
+                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
+                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
+                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
+                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const std::vector<Vector3> points = {
+                                    { rightOffset, up, backward },   // left-back
+                                    { rightOffset, down, backward },  // right-back
+                                    { rightOffset, up, forward },    // left-front
+                                    { rightOffset, down, forward }    // right-front
+                                };
+        
+                                worldMesh.addPoints(points);
+                            }
+                            if (exposedFaces[LEFT])
+                            {
+                                const float rightOffset = currentBlock.x - (BLOCK_SIZE / 2);
+                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
+                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
+                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
+                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const std::vector<Vector3> points = {
+                                    { rightOffset, up, backward },   // left-back
+                                    { rightOffset, down, backward },  // right-back
+                                    { rightOffset, up, forward },    // left-front
+                                    { rightOffset, down, forward }    // right-front
+                                };
+
+                                worldMesh.addPoints(points);
+                            }
+                            if (exposedFaces[FRONT])
+                            {
+                                const float rightOffset = currentBlock.x - (BLOCK_SIZE / 2);
+                                const float up = currentBlock.y - (BLOCK_SIZE / 2);
+                                const float down = currentBlock.y + (BLOCK_SIZE / 2);
+                                const float backward = currentBlock.z - (BLOCK_SIZE / 2);
+                                const float forward = currentBlock.z + (BLOCK_SIZE / 2);
+                                const std::vector<Vector3> points = {
+                                    { rightOffset, up, backward },   // left-back
+                                    { rightOffset, down, backward },  // right-back
+                                    { rightOffset, up, forward },    // left-front
+                                    { rightOffset, down, forward }    // right-front
+                                };
+
                                 worldMesh.addPoints(points);
                             }
                             // other faces
