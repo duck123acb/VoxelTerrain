@@ -147,16 +147,17 @@ class World
         // chunk blocks into 8x8xHeight grids to generate voxel data
         for (int chunkX = 1; chunkX < 9; chunkX++)
         {
-            for (int chunkY = 1; chunkY < 9; chunkY++)
+            for (int chunkZ = 1; chunkZ < 9; chunkZ++)
             {
                 auto worldMesh = WorldMesh();
 
-                for (int k = 0; k < height; k++)
+                for (int j = 0; j < height; j++)
                 {
-                    for (int i = 0; i < 8 * chunkX; i++)
+                    for (int i = chunkX; i < 8 * chunkX; i++)
                     {
-                        for (int j = 0; j < 8 * chunkY; j++)
+                        for (int k = chunkZ; k < 8 * chunkZ; k++)
                         {
+
                         }
                     }
 
