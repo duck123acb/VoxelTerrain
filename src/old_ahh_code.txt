@@ -1,0 +1,113 @@
+old code for reference xD
+
+
+
+
+
+
+
+const Block& currentBlock = blocks[i][j][k];
+std::vector<bool> exposedFaces = checkBlockExposedFaces(i, j, k);
+
+constexpr float halfBlockSize = BLOCK_SIZE / 2;
+if (exposedFaces[UP])
+{
+    const float upOffset = currentBlock.y - halfBlockSize;
+    const float left = currentBlock.x - halfBlockSize;
+    const float right = currentBlock.x + halfBlockSize;
+    const float backward = currentBlock.z - halfBlockSize;
+    const float forward = currentBlock.z + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { left, upOffset, backward },   // left-back
+        { right, upOffset, backward },  // right-back
+        { left, upOffset, forward },    // left-front
+        { right, upOffset, forward }    // right-front
+    };
+
+    worldMesh.addPoints(points);
+}
+
+if (exposedFaces[DOWN])
+{
+    const float downOffset = currentBlock.y + halfBlockSize;
+    const float left = currentBlock.x - halfBlockSize;
+    const float right = currentBlock.x + halfBlockSize;
+    const float backward = currentBlock.z - halfBlockSize;
+    const float forward = currentBlock.z + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { left, downOffset, backward },   // left-back
+        { right, downOffset, backward },  // right-back
+        { left, downOffset, forward },    // left-front
+        { right, downOffset, forward }    // right-front
+    };
+
+    worldMesh.addPoints(points);
+}
+
+if (exposedFaces[RIGHT])
+{
+    const float rightOffset = currentBlock.x + halfBlockSize;
+    const float up = currentBlock.y - halfBlockSize;
+    const float down = currentBlock.y + halfBlockSize;
+    const float backward = currentBlock.z - halfBlockSize;
+    const float forward = currentBlock.z + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { rightOffset, up, backward },   // top-back
+        { rightOffset, down, backward },  // bottom-back
+        { rightOffset, up, forward },    // top-front
+        { rightOffset, down, forward }    // bottom-front
+    };
+
+    worldMesh.addPoints(points);
+}
+
+if (exposedFaces[LEFT])
+{
+    const float leftOffset = currentBlock.x - halfBlockSize;
+    const float up = currentBlock.y - halfBlockSize;
+    const float down = currentBlock.y + halfBlockSize;
+    const float backward = currentBlock.z - halfBlockSize;
+    const float forward = currentBlock.z + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { leftOffset, up, backward },   // top-back
+        { leftOffset, down, backward },  // bottom-back
+        { leftOffset, up, forward },    // top-front
+        { leftOffset, down, forward }    // bottom-front
+    };
+
+    worldMesh.addPoints(points);
+}
+
+if (exposedFaces[FRONT])
+{
+    const float forwardOffset = currentBlock.z + halfBlockSize;
+    const float up = currentBlock.y - halfBlockSize;
+    const float down = currentBlock.y + halfBlockSize;
+    const float left = currentBlock.x - halfBlockSize;
+    const float right = currentBlock.x + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { left, up, forwardOffset },   // top-left
+        { right, up, forwardOffset },  // top-right
+        { left, down, forwardOffset },    // bottom-left
+        { right, down, forwardOffset }    // bottom-right
+    };
+
+    worldMesh.addPoints(points);
+}
+
+if (exposedFaces[BACK])
+{
+    const float backOffset = currentBlock.z - halfBlockSize;
+    const float up = currentBlock.y - halfBlockSize;
+    const float down = currentBlock.y + halfBlockSize;
+    const float left = currentBlock.x - halfBlockSize;
+    const float right = currentBlock.x + halfBlockSize;
+    const std::vector<Vector3> points = {
+        { left, up, backOffset },   // top-left
+        { right, up, backOffset },  // top-right
+        { left, down, backOffset },    // bottom-left
+        { right, down, backOffset }    // bottom-right
+    };
+
+    worldMesh.addPoints(points);
+}
