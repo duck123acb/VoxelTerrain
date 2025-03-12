@@ -21,15 +21,15 @@ enum Face
 };
 struct Block
 {
-    float x, y, z;
+    float x, z, y;
     int blockType;
     bool isSolid;
 
-    Block(const float x, const float y, const float z, const int blockType, const bool isSolid)
+    Block(const float x, const float z, const float y, const int blockType, const bool isSolid)
     {
         this->x = x;
-        this->y = y;
         this->z = z;
+        this->y = y;
         this->blockType = blockType;
         this->isSolid = isSolid;
     }
@@ -73,37 +73,31 @@ class World
     {
         return 0;
     }
-    [[nodiscard]] std::vector<bool> checkBlockExposedFaces(const int i, const int j, const int k) const
+    [[nodiscard]] std::vector<bool> checkBlockExposedFaces(const int x, const int z, const int y) const
     {
-        std::vector<bool> exposedFaces = { false, false, false, false, false, false };
+        std::vector exposedFaces = { false, false, false, false, false, false };
 
-        // Up face (i, j, k+1)
-        if (k + 1 >= height || blocks[i][j][k + 1].blockType == Air) {
+        if (y + 1 >= height || blocks[x][z][y + 1].blockType == Air) {
             exposedFaces[UP] = true;
         }
 
-        // Down face (i, j, k-1)
-        if (k - 1 < 0 || blocks[i][j][k - 1].blockType == Air) {
+        if (y - 1 < 0 || blocks[x][z][y - 1].blockType == Air) {
             exposedFaces[DOWN] = true;
         }
 
-        // Left face (i-1, j, k)
-        if (i - 1 < 0 || blocks[i - 1][j][k].blockType == Air) {
+        if (x - 1 < 0 || blocks[x - 1][z][y].blockType == Air) {
             exposedFaces[LEFT] = true;
         }
 
-        // Right face (i+1, j, k)
-        if (i + 1 >= height || blocks[i + 1][j][k].blockType == Air) {
+        if (x + 1 >= height || blocks[x + 1][z][y].blockType == Air) {
             exposedFaces[RIGHT] = true;
         }
 
-        // Front face (i, j+1, k)
-        if (j + 1 >= height || blocks[i][j + 1][k].blockType == Air) {
+        if (z + 1 >= height || blocks[x][z + 1][y].blockType == Air) {
             exposedFaces[FRONT] = true;
         }
 
-        // Back face (i, j-1, k)
-        if (j - 1 < 0 || blocks[i][j - 1][k].blockType == Air) {
+        if (z - 1 < 0 || blocks[x][z - 1][y].blockType == Air) {
             exposedFaces[BACK] = true;
         }
 
@@ -125,24 +119,24 @@ class World
         // generate an internal representation of the world based on the heightMap
         for (int i = 0; i < width; i++)// iterate over width (x-axis)
         {
-            for (int j = 0; j < depth; j++) // iterate over depth (z-axis)
+            for (int k = 0; k < depth; k++) // iterate over depth (z-axis)
             {
-                const int columnHeight = heightMap[i][j];
+                const int columnHeight = heightMap[i][k];
                 constexpr float halfBlockSize = BLOCK_SIZE / 2;
 
                 // generate blocks up to the height determined by the heightmap
-                for (int k = 0; k < height; k++) // iterate over height (y-axis)
+                for (int j = 0; j < height; j++) // iterate over height (y-axis)
                 {
                     const float x = (i * BLOCK_SIZE) + halfBlockSize;
-                    const float y = (k * BLOCK_SIZE) + halfBlockSize;
-                    const float z = (j * BLOCK_SIZE) + halfBlockSize;
+                    const float z = (k * BLOCK_SIZE) + halfBlockSize;
+                    const float y = (j * BLOCK_SIZE) + halfBlockSize;
 
-                    if (k <= columnHeight)
+                    if (j <= columnHeight)
                     {
-                        blocks[i][k][j] = Block(x, y, z, Grass, true);
+                        blocks[i][k][j] = Block(x, z, y, Grass, true);
                         continue;
                     }
-                    blocks[i][k][j] = Block(x, y, z, Air, false);
+                    blocks[i][k][j] = Block(x, z, y, Air, false);
                 }
             }
         }
