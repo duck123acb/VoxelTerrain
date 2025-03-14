@@ -33,6 +33,23 @@ struct Block
         this->blockType = blockType;
         this->isSolid = isSolid;
     }
+
+    static std::vector<Vector3> getFaceVertices(const Block& block, const int face)
+    {
+        constexpr float s = BLOCK_SIZE / 2; // half block size
+
+        switch (face)
+        {
+            case UP:    return { { block.x - s, block.y + s, block.z - s }, { block.x + s, block.y + s, block.z - s }, { block.x - s, block.y + s, block.z + s }, { block.x + s, block.y + s, block.z + s } };
+            case DOWN:  return { { block.x - s, block.y - s, block.z - s }, { block.x + s, block.y - s, block.z - s }, { block.x - s, block.y - s, block.z + s }, { block.x + s, block.y - s, block.z + s } };
+            case LEFT:  return { { block.x - s, block.y - s, block.z - s }, { block.x - s, block.y + s, block.z - s }, { block.x - s, block.y - s, block.z + s }, { block.x - s, block.y + s, block.z + s } };
+            case RIGHT: return { { block.x + s, block.y - s, block.z - s }, { block.x + s, block.y + s, block.z - s }, { block.x + s, block.y - s, block.z + s }, { block.x + s, block.y + s, block.z + s } };
+            case FRONT: return { { block.x - s, block.y - s, block.z + s }, { block.x + s, block.y - s, block.z + s }, { block.x - s, block.y + s, block.z + s }, { block.x + s, block.y + s, block.z + s } };
+            case BACK:  return { { block.x - s, block.y - s, block.z - s }, { block.x + s, block.y - s, block.z - s }, { block.x - s, block.y + s, block.z - s }, { block.x + s, block.y + s, block.z - s } };
+        }
+
+        return {};
+    }
 };
 
 struct WorldMesh
@@ -157,10 +174,22 @@ class World
                     {
                         for (int k = chunkZ; k < 8 * chunkZ; k++)
                         {
+                            const auto& block = blocks[i][k][j];
 
+                            if (block.blockType == Air) continue; // skip air blocks
+
+                            const auto exposedFaces = checkBlockExposedFaces(i, k, j);
+
+                            for (int face = 0; face < 6; face++)
+                            {
+                                if (exposedFaces[face])
+                                {
+                                    const auto faceVertices = Block::getFaceVertices(block, face);
+                                    worldMesh.addPoints(faceVertices);
+                                }
+                            }
                         }
                     }
-
                 }
             }
         }
@@ -172,12 +201,6 @@ public:
         height = world_height;
         generateWorld(world_width, world_depth, world_height);
     }
-
-
-    // void render()
-    // {
-    //
-    // }
 };
 
 
