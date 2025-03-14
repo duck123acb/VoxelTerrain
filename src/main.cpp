@@ -176,7 +176,7 @@ class World
                         {
                             const auto& block = blocks[i][k][j];
 
-                            if (block.blockType == Air) continue; // skip air blocks
+                            if (block.blockType == Air) continue;
 
                             const auto exposedFaces = checkBlockExposedFaces(i, k, j);
 
